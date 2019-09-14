@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <NavBar />
+    <div class="container d-flex">
+      <Sidebar />
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -24,3 +28,10 @@
   }
 }
 </style>
+<script>
+  import NavBar from './components/NavBar';
+  import Sidebar from './components/Sidebar';
+  export default {
+    components: {Sidebar, NavBar}
+  }
+</script>
