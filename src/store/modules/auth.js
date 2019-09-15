@@ -1,4 +1,4 @@
-import {AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT} from '../actions/auth'
+import {AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT, AUTH_LOGIN, AUTH_REGISTER} from '../actions/auth'
 import {USER_REQUEST} from "../actions/user";
 import api from '../../utils/api'
 
@@ -15,10 +15,24 @@ const getters = {
 }
 
 const actions = {
-  [AUTH_REQUEST]: ({commit, dispatch}, user) => {
+  [AUTH_LOGIN]: ({commit, dispatch}, user) => {
+    return new Promise((resolve, reject) => {
+      dispatch(AUTH_REQUEST, {user: user, route: '/login'})
+        .then(response => resolve(response))
+        .catch(err => reject(err))
+    })
+  },
+  [AUTH_REGISTER]: ({commit, dispatch}, user) => {
+    return new Promise((resolve, reject) => {
+      dispatch(AUTH_REQUEST, {user: user, route: '/register'})
+        .then(response => resolve(response))
+        .catch(err => reject(err))
+    })
+  },
+  [AUTH_REQUEST]: ({commit, dispatch}, data) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST)
-      api({url: '/login', data: user, method: 'POST'})
+      api({url: data.route, data: data.user, method: 'POST'})
         .then(response => {
           localStorage.setItem(storeKey, response.data.token)
           api.defaults.headers['Authorization'] = 'Bearer ' + response.data.token
